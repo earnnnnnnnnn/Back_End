@@ -23,7 +23,7 @@ const Rental = sequelize.define('Rental', {
         // autoIncrement: true,
         primaryKey: true
     },
-    start_data: {
+    start_date: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
@@ -33,7 +33,7 @@ const Rental = sequelize.define('Rental', {
                         .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
                 }
     },
-    end_data: {
+    end_date: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน

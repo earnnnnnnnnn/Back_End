@@ -18,7 +18,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 // define the book model
 const Return = sequelize.define('return', {
-    returnl_id: {
+    return_id: {
         type: Sequelize.STRING,
         // autoIncrement: true,
         primaryKey: true
