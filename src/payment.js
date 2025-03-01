@@ -17,7 +17,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 // define the book model
-const Payment = sequelize.define('payment', {
+const Payment = sequelize.define('Payment', {
     payment_id: {
         type: Sequelize.STRING,
         // autoIncrement: true,

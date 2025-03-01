@@ -17,19 +17,19 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 // reservation
-const Reservation = sequelize.define('reservation', {
+const Reservation = sequelize.define('Reservation', {
     reservation_id: {
         type: Sequelize.STRING,
         // autoIncrement: true,
         primaryKey: true
     },
-    reservation_data:{
+    reservation_date:{
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
         get() {
             // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-            return new Date(this.getDataValue('reservation_data'))
+            return new Date(this.getDataValue('reservation_date'))
                 .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
         }
     },

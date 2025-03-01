@@ -29,7 +29,7 @@ const Rental = sequelize.define('Rental', {
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
                 get() {
                     // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('reservation_data'))
+                    return new Date(this.getDataValue('start_date'))
                         .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
                 }
     },
@@ -39,7 +39,7 @@ const Rental = sequelize.define('Rental', {
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
                 get() {
                     // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('reservation_data'))
+                    return new Date(this.getDataValue('end_date'))
                         .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
                 }
     },

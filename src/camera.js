@@ -17,7 +17,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 // define the book model
-const Camera = sequelize.define('camera', {
+const Camera = sequelize.define('Camera', {
     camera_id: {
         type: Sequelize.STRING,
         // autoIncrement: true,
