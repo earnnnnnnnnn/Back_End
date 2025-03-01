@@ -17,26 +17,21 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 // define the book model
-const Reservation = sequelize.define('reservation', {
-    reservation_id: {
+const Return = sequelize.define('return', {
+    returnl_id: {
         type: Sequelize.STRING,
         // autoIncrement: true,
         primaryKey: true
     },
-    reservation_data:{
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW
-    },
-    status: {
+    rental_id: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    user_id: {
+    condition: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    camera_id: {
+    extra_charge: {
         type: Sequelize.STRING,
         allowNull: false
     }
@@ -47,30 +42,30 @@ sequelize.sync()
 
 
 // route to get all books
-app.get("/reservation", (req, res) => {
-    Reservation.findAll().then(reservation => {
-       res.json(reservation);
+app.get("/return", (req, res) => {
+   Return.findAll().then(returns => {
+       res.json(returns);
    }).catch(err => {
        res.status(500).send(err);
    });
 });
 
 // route to get a book by id
-app.get('/reservation/:id', (req, res) => {
-    Reservation.findByPk(req.params.id).then(reservation => {
-        if (!reservation)
+app.get('/return/:id', (req, res) => {
+    Return.findByPk(req.params.id).then(returns => {
+        if (!returns)
             res.status(404).send();
         else
-            res.json(reservation);
+            res.json(returns);
     }).catch(err => {
         res.status(500).send(err);
     });
 });
 
 // route to add a new book
-app.post('/reservation', (req, res) => {
-    Reservation.create(req.body).then(reservation => {
-        res.json(reservation);
+app.post('/return', (req, res) => {
+    Return.create(req.body).then(returns => {
+        res.json(returns);
     }
     ).catch(err => {
         res.status(500).send(err);
@@ -78,13 +73,13 @@ app.post('/reservation', (req, res) => {
 });
 
 // route to update a book
-app.put('/reservation:id', (req, res) => {
-    Reservation.findByPk(req.params.id).then(reservation => {
-        if (!reservation)
+app.put('/return:id', (req, res) => {
+    Return.findByPk(req.params.id).then(returns => {
+        if (!returns)
             res.status(404).send();
         else
-            reservation.update(req.body).then(reservation => {
-                res.json(reservation);
+            returns.update(req.body).then(returns => {
+                res.json(returns);
             }).catch(err => {
                 res.status(500).send(err);
             });
@@ -94,13 +89,13 @@ app.put('/reservation:id', (req, res) => {
 });
 
 // route to delete a book
-app.delete('/reservation/:id', (req, res) => {
-    Reservation.findByPk(req.params.id).then(reservation => {
-        if (!reservation)
+app.delete('/return/:id', (req, res) => {
+    Return.findByPk(req.params.id).then(returns => {
+        if (!returns)
             res.status(404).send();
         else
-            reservation.destroy().then(() => {
-                res.json(reservation);
+            returns.destroy().then(() => {
+                res.json(returns);
             }).catch(err => {
                 res.status(500).send(err);
             });

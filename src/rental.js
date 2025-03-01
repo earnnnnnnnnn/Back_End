@@ -17,22 +17,29 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 // define the book model
-const Reservation = sequelize.define('reservation', {
-    reservation_id: {
+const Rental = sequelize.define('Rental', {
+    rental_id: {
         type: Sequelize.STRING,
         // autoIncrement: true,
         primaryKey: true
     },
-    reservation_data:{
+    start_data: {
         type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW
-    },
-    status: {
-        type: Sequelize.STRING,
         allowNull: false
     },
-    user_id: {
+    end_data: {
+        type: Sequelize.DATE,
+        allowNull: false
+    },
+    total_price: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+    },
+    status: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+    },
+    users_id: {
         type: Sequelize.STRING,
         allowNull: false
     },
@@ -47,30 +54,30 @@ sequelize.sync()
 
 
 // route to get all books
-app.get("/reservation", (req, res) => {
-    Reservation.findAll().then(reservation => {
-       res.json(reservation);
+app.get("/rental", (req, res) => {
+   Rental.findAll().then(rental => {
+       res.json(rental);
    }).catch(err => {
        res.status(500).send(err);
    });
 });
 
 // route to get a book by id
-app.get('/reservation/:id', (req, res) => {
-    Reservation.findByPk(req.params.id).then(reservation => {
-        if (!reservation)
+app.get('/rental/:id', (req, res) => {
+    Rental.findByPk(req.params.id).then(rental => {
+        if (!rental)
             res.status(404).send();
         else
-            res.json(reservation);
+            res.json(rental);
     }).catch(err => {
         res.status(500).send(err);
     });
 });
 
 // route to add a new book
-app.post('/reservation', (req, res) => {
-    Reservation.create(req.body).then(reservation => {
-        res.json(reservation);
+app.post('/rental', (req, res) => {
+    Rental.create(req.body).then(rental => {
+        res.json(rental);
     }
     ).catch(err => {
         res.status(500).send(err);
@@ -78,13 +85,13 @@ app.post('/reservation', (req, res) => {
 });
 
 // route to update a book
-app.put('/reservation:id', (req, res) => {
-    Reservation.findByPk(req.params.id).then(reservation => {
-        if (!reservation)
+app.put('/rental/:id', (req, res) => {
+    Rental.findByPk(req.params.id).then(rental => {
+        if (!rental)
             res.status(404).send();
         else
-            reservation.update(req.body).then(reservation => {
-                res.json(reservation);
+            rental.update(req.body).then(rental => {
+                res.json(rental);
             }).catch(err => {
                 res.status(500).send(err);
             });
@@ -94,13 +101,13 @@ app.put('/reservation:id', (req, res) => {
 });
 
 // route to delete a book
-app.delete('/reservation/:id', (req, res) => {
-    Reservation.findByPk(req.params.id).then(reservation => {
-        if (!reservation)
+app.delete('/rental/:id', (req, res) => {
+    Rental.findByPk(req.params.id).then(rental => {
+        if (!rental)
             res.status(404).send();
         else
-            reservation.destroy().then(() => {
-                res.json(reservation);
+            rental.destroy().then(() => {
+                res.json(rental);
             }).catch(err => {
                 res.status(500).send(err);
             });
