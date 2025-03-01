@@ -23,9 +23,15 @@ const Return = sequelize.define('return', {
         // autoIncrement: true,
         primaryKey: true
     },
-    rental_id: {
+    return_date: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
+                get() {
+                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+                    return new Date(this.getDataValue('reservation_data'))
+                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+                }
     },
     condition: {
         type: Sequelize.STRING,

@@ -157,7 +157,12 @@ const Reservation = sequelize.define('reservation', {
     reservation_data:{
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
+                get() {
+                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+                    return new Date(this.getDataValue('reservation_data'))
+                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+                }
     },
     status: {
         type: Sequelize.STRING,

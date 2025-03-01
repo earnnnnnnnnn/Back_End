@@ -16,42 +16,28 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: './Database/CameraDB.sqlite',
 });
 
-// define the book model
-const Rental = sequelize.define('Rental', {
-    rental_id: {
+// reservation
+const Reservation = sequelize.define('reservation', {
+    reservation_id: {
         type: Sequelize.STRING,
         // autoIncrement: true,
         primaryKey: true
     },
-    start_data: {
+    reservation_data:{
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-                get() {
-                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('reservation_data'))
-                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-                }
-    },
-    end_data: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-                get() {
-                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('reservation_data'))
-                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-                }
-    },
-    total_price: {
-        type: Sequelize.FLOAT,
-        allowNull: false
+        get() {
+            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+            return new Date(this.getDataValue('reservation_data'))
+                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+        }
     },
     status: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING,
         allowNull: false
     },
-    users_id: {
+    user_id: {
         type: Sequelize.STRING,
         allowNull: false
     },
@@ -64,32 +50,31 @@ const Rental = sequelize.define('Rental', {
 // create the table if it doesn't exist
 sequelize.sync()
 
-
 // route to get all books
-app.get("/rental", (req, res) => {
-   Rental.findAll().then(rental => {
-       res.json(rental);
+app.get("/reservation", (req, res) => {
+    Reservation.findAll().then(reservation => {
+       res.json(reservation);
    }).catch(err => {
        res.status(500).send(err);
    });
 });
 
 // route to get a book by id
-app.get('/rental/:id', (req, res) => {
-    Rental.findByPk(req.params.id).then(rental => {
-        if (!rental)
+app.get('/reservation/:id', (req, res) => {
+    Reservation.findByPk(req.params.id).then(reservation => {
+        if (!reservation)
             res.status(404).send();
         else
-            res.json(rental);
+            res.json(reservation);
     }).catch(err => {
         res.status(500).send(err);
     });
 });
 
 // route to add a new book
-app.post('/rental', (req, res) => {
-    Rental.create(req.body).then(rental => {
-        res.json(rental);
+app.post('/reservation', (req, res) => {
+    Reservation.create(req.body).then(reservation => {
+        res.json(reservation);
     }
     ).catch(err => {
         res.status(500).send(err);
@@ -97,13 +82,13 @@ app.post('/rental', (req, res) => {
 });
 
 // route to update a book
-app.put('/rental/:id', (req, res) => {
-    Rental.findByPk(req.params.id).then(rental => {
-        if (!rental)
+app.put('/reservation:id', (req, res) => {
+    Reservation.findByPk(req.params.id).then(reservation => {
+        if (!reservation)
             res.status(404).send();
         else
-            rental.update(req.body).then(rental => {
-                res.json(rental);
+            reservation.update(req.body).then(reservation => {
+                res.json(reservation);
             }).catch(err => {
                 res.status(500).send(err);
             });
@@ -113,13 +98,13 @@ app.put('/rental/:id', (req, res) => {
 });
 
 // route to delete a book
-app.delete('/rental/:id', (req, res) => {
-    Rental.findByPk(req.params.id).then(rental => {
-        if (!rental)
+app.delete('/reservation/:id', (req, res) => {
+    Reservation.findByPk(req.params.id).then(reservation => {
+        if (!reservation)
             res.status(404).send();
         else
-            rental.destroy().then(() => {
-                res.json(rental);
+            reservation.destroy().then(() => {
+                res.json(reservation);
             }).catch(err => {
                 res.status(500).send(err);
             });
