@@ -19,8 +19,8 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 // reservation
 const Reservation = sequelize.define('Reservation', {
     reservation_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     reservation_date:{
@@ -38,11 +38,11 @@ const Reservation = sequelize.define('Reservation', {
         allowNull: false
     },
     user_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     camera_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false
     }
 });

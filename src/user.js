@@ -16,11 +16,12 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: './Database/CameraDB.sqlite',
 });
 
+//users
 // define the book model
 const Users = sequelize.define('Users', {
     users_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     username: {

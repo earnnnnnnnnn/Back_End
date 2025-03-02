@@ -19,8 +19,8 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 // define the book model
 const Rental = sequelize.define('Rental', {
     rental_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     start_date: {
@@ -48,15 +48,15 @@ const Rental = sequelize.define('Rental', {
         allowNull: false
     },
     status: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING,
         allowNull: false
     },
     users_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     camera_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false
     }
 });

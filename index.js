@@ -16,12 +16,12 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: './Database/CameraDB.sqlite',
 });
 
-//user
+//users
 // define the book model
 const Users = sequelize.define('Users', {
     users_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     username: {
@@ -44,10 +44,11 @@ const Users = sequelize.define('Users', {
 
 
 //camera
+// define the book model
 const Camera = sequelize.define('Camera', {
     camera_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     cameraname: {
@@ -73,12 +74,11 @@ const Camera = sequelize.define('Camera', {
 });
 
 
-
 //rental
 const Rental = sequelize.define('Rental', {
     rental_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     start_date: {
@@ -106,102 +106,19 @@ const Rental = sequelize.define('Rental', {
         allowNull: false
     },
     status: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING,
         allowNull: false
     },
     users_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     camera_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false
     }
 });
 
-
-
-//return
-const Return = sequelize.define('Return', {
-    return_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
-        primaryKey: true
-    },
-    return_date: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-                get() {
-                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('reservation_data'))
-                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-                }
-    },
-    condition: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    extra_charge: {
-        type: Sequelize.STRING,
-        allowNull: false
-    }
-});
-
-
-//payment
-const Payment = sequelize.define('Payment', {
-    payment_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
-        primaryKey: true
-    },
-    amount: {
-        type: Sequelize.FLOAT,
-        allowNull: false
-    },
-    payment_method: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    rental_id: {
-        type: Sequelize.STRING,
-        allowNull: false
-    }
-});
-
-
-
-//reservation
-const Reservation = sequelize.define('Reservation', {
-    reservation_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
-        primaryKey: true
-    },
-    reservation_date:{
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-        get() {
-            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-            return new Date(this.getDataValue('reservation_date'))
-                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-        }
-    },
-    status: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    user_id: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    camera_id: {
-        type: Sequelize.STRING,
-        allowNull: false
-    }
-});
 
 // create the table if it doesn't exist
 sequelize.sync()

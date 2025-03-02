@@ -19,17 +19,21 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 // define the book model
 const Return = sequelize.define('Return', {
     return_id: {
-        type: Sequelize.STRING,
-        // autoIncrement: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
+    rental_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
     return_date: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
                 get() {
                     // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('reservation_data'))
+                    return new Date(this.getDataValue('return_date'))
                         .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
                 }
     },
