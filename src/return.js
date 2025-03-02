@@ -84,7 +84,7 @@ app.post('/return', (req, res) => {
 });
 
 // route to update a book
-app.put('/return:id', (req, res) => {
+app.put('/return/:id', (req, res) => {
     Return.findByPk(req.params.id).then(returns => {
         if (!returns)
             res.status(404).send();

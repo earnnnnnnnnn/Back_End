@@ -288,7 +288,7 @@ app.get("/camera", (req, res) => {
  });
  
  // route to get a book by id
- app.get('/camara/:id', (req, res) => {
+ app.get('/camera/:id', (req, res) => {
      Camera.findByPk(req.params.id).then(camera => {
          if (!camera)
              res.status(404).send();
@@ -326,7 +326,7 @@ app.get("/camera", (req, res) => {
  });
  
  // route to delete a book
- app.delete('/users/:id', (req, res) => {
+ app.delete('/camera/:id', (req, res) => {
      Camera.findByPk(req.params.id).then(camera => {
          if (!camera)
              res.status(404).send();
@@ -440,7 +440,7 @@ app.get("/return", (req, res) => {
  });
  
  // route to update a book
- app.put('/return:id', (req, res) => {
+ app.put('/return/:id', (req, res) => {
      Return.findByPk(req.params.id).then(returns => {
          if (!returns)
              res.status(404).send();
@@ -504,7 +504,7 @@ app.get("/payment", (req, res) => {
  });
  
  // route to update a book
- app.put('/payment:id', (req, res) => {
+ app.put('/payment/:id', (req, res) => {
      Payment.findByPk(req.params.id).then(payment => {
          if (!payment)
              res.status(404).send();
@@ -520,7 +520,7 @@ app.get("/payment", (req, res) => {
  });
  
  // route to delete a book
- app.delete('/return/:id', (req, res) => {
+ app.delete('/payment/:id', (req, res) => {
      Payment.findByPk(req.params.id).then(payment => {
          if (!payment)
              res.status(404).send();

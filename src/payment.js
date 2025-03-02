@@ -74,7 +74,7 @@ app.post('/payment', (req, res) => {
 });
 
 // route to update a book
-app.put('/payment:id', (req, res) => {
+app.put('/payment/:id', (req, res) => {
     Payment.findByPk(req.params.id).then(payment => {
         if (!payment)
             res.status(404).send();
@@ -90,7 +90,7 @@ app.put('/payment:id', (req, res) => {
 });
 
 // route to delete a book
-app.delete('/return/:id', (req, res) => {
+app.delete('/payment/:id', (req, res) => {
     Payment.findByPk(req.params.id).then(payment => {
         if (!payment)
             res.status(404).send();
