@@ -208,6 +208,28 @@ const Reservation = sequelize.define('Reservation', {
 });
 
 
+// ตั้งค่าความสัมพันธ์หลังจากประกาศโมเดล
+Users.hasMany(Rental, { foreignKey: 'users_id' });
+Rental.belongsTo(Users, { foreignKey: 'users_id' });
+
+Camera.hasMany(Rental, { foreignKey: 'camera_id' });
+Rental.belongsTo(Camera, { foreignKey: 'camera_id' });
+
+Rental.hasMany(Payment, { foreignKey: 'rental_id' });
+Payment.belongsTo(Rental, { foreignKey: 'rental_id' });
+
+Rental.hasOne(Return, { foreignKey: 'rental_id' });
+Return.belongsTo(Rental, { foreignKey: 'rental_id' });
+
+Camera.hasMany(Reservation, { foreignKey: 'camera_id' });
+Reservation.belongsTo(Camera, { foreignKey: 'camera_id' });
+
+Users.hasMany(Reservation, { foreignKey: 'user_id' });
+Reservation.belongsTo(Users, { foreignKey: 'user_id' });
+
+// sync ฐานข้อมูล
+sequelize.sync();
+
 // create the table if it doesn't exist
 sequelize.sync()
 
