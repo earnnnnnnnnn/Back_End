@@ -120,6 +120,94 @@ const Rental = sequelize.define('Rental', {
 });
 
 
+//return
+// define the book model
+const Return = sequelize.define('Return', {
+    return_id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    rental_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    return_date: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
+                get() {
+                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+                    return new Date(this.getDataValue('return_date'))
+                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+                }
+    },
+    condition: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    extra_charge: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+});
+
+
+//payment
+// define the book model
+const Payment = sequelize.define('Payment', {
+    payment_id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    amount: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+    },
+    payment_method: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    rental_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    }
+});
+
+
+// reservation
+const Reservation = sequelize.define('Reservation', {
+    reservation_id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    reservation_date:{
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
+        get() {
+            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+            return new Date(this.getDataValue('reservation_date'))
+                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+        }
+    },
+    status: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    camera_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    }
+});
+
+
 // create the table if it doesn't exist
 sequelize.sync()
 

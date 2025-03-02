@@ -16,6 +16,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: './Database/CameraDB.sqlite',
 });
 
+//payment
 // define the book model
 const Payment = sequelize.define('Payment', {
     payment_id: {
