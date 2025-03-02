@@ -2,6 +2,7 @@ require('dotenv').config();
 const port = process.env.PORT || 3000;
 
 const express = require("express");
+const { model } = require('mongoose');
 const app = express();
 const Sequelize = require('sequelize');
 
@@ -111,11 +112,19 @@ const Rental = sequelize.define('Rental', {
     },
     users_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references :{
+            model:Users,
+            key: "users_id"
+          }
     },
     camera_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references :{
+            model:Camera,
+            key: "camera_id"
+        }
     }
 });
 
@@ -130,7 +139,11 @@ const Return = sequelize.define('Return', {
     },
     rental_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references :{
+            model:Rental,
+            key: "rental_id"
+        }
     },
     return_date: {
         type: Sequelize.DATE,
@@ -171,7 +184,11 @@ const Payment = sequelize.define('Payment', {
     },
     rental_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references :{
+            model:Rental,
+            key: "rental_id"
+        }
     }
 });
 
@@ -199,16 +216,24 @@ const Reservation = sequelize.define('Reservation', {
     },
     user_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references :{
+            model:Users,
+            key: "users_id"
+          }
     },
     camera_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references :{
+            model:Camera,
+            key: "camera_id"
+        }
     }
 });
 
 
-// ตั้งค่าความสัมพันธ์หลังจากประกาศโมเดล
+// // ตั้งค่าความสัมพันธ์หลังจากประกาศโมเดล
 Users.hasMany(Rental, { foreignKey: 'users_id' });
 Rental.belongsTo(Users, { foreignKey: 'users_id' });
 
@@ -227,8 +252,6 @@ Reservation.belongsTo(Camera, { foreignKey: 'camera_id' });
 Users.hasMany(Reservation, { foreignKey: 'user_id' });
 Reservation.belongsTo(Users, { foreignKey: 'user_id' });
 
-// sync ฐานข้อมูล
-sequelize.sync();
 
 // create the table if it doesn't exist
 sequelize.sync()
