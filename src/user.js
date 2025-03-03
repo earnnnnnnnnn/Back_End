@@ -16,7 +16,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: './Database/CameraDB.sqlite',
 });
 
-//users
+//user
 // define the book model
 const Users = sequelize.define('Users', {
     users_id: {
