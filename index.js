@@ -35,7 +35,8 @@ const Users = sequelize.define('Users', {
     },
     email: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     phone_number: {
         type: Sequelize.STRING,
