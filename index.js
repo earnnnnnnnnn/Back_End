@@ -53,6 +53,10 @@ const Camera = sequelize.define('Camera', {
         autoIncrement: true,
         primaryKey: true
     },
+    cameraimg: {
+            type: Sequelize.STRING,
+            allowNull: false
+    },
     cameraname: {
         type: Sequelize.STRING,
         allowNull: false
