@@ -286,10 +286,13 @@ app.get('/users/:id', (req, res) => {
 
 // route to add a new book
 app.post('/users', (req, res) => {
+    console.log('Received data:', req.body); // ตรวจสอบข้อมูลที่ได้รับจากคำขอ
     Users.create(req.body).then(users => {
+        console.log("pass");
         res.json(users);
-    }
-    ).catch(err => {
+    }).catch(err => {
+        console.log("fail");
+        console.error(err); // เพิ่มการแสดงข้อผิดพลาด
         res.status(500).send(err);
     });
 });
