@@ -448,22 +448,21 @@ app.get("/rental", (req, res) => {
  });
  
  // route to delete a book
- app.delete('/rental/:id', (req, res) => {
-     Rental.findByPk(req.params.id).then(rental => {
-         if (!rental)
-             res.status(404).send();
-         else
-             rental.destroy().then(() => {
-                 res.json(rental);
-             }).catch(err => {
-                 res.status(500).send(err);
-             });
-     }).catch(err => {
-         res.status(500).send(err);
-     });
- });
-
-
+app.delete('/rental/:id/:uid', (req, res) => {
+    const { id, uid } = req.params;
+    Rental.findOne({ where: { camera_id: id, users_id: uid } }).then(rental => {
+        if (!rental)
+            res.status(404).send();
+        else
+            rental.destroy().then(() => {
+                res.json(rental);
+            }).catch(err => {
+                res.status(500).send(err);
+            });
+    }).catch(err => {
+        res.status(500).send(err);
+    });
+});
 
 //return
 app.get("/return", (req, res) => {
