@@ -41,7 +41,11 @@ const Users = sequelize.define('Users', {
     phone_number: {
         type: Sequelize.STRING,
         allowNull: false
-    }
+    },
+    // address:{
+    //     type: Sequelize.STRING,
+    //     allowNull: false
+    // }
 });
 
 
