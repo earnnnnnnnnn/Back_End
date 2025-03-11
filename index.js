@@ -187,32 +187,13 @@ const Payment = sequelize.define('Payment', {
         type: Sequelize.FLOAT,
         allowNull: false
     },
-    payment_method: {
-        type: Sequelize.STRING,
-        allowNull: true
-    },users_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references :{
-            model:Users,
-            key: "users_id"
-          }
-    },
     users_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references :{
             model:Users,
             key: "users_id"
-        }
-    },
-    rental_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references :{
-            model:Rental,
-            key: "rental_id"
-        }
+          }
     }
 });
 
@@ -272,12 +253,12 @@ const Order = sequelize.define('order', {
             key: 'user_id'
         }
     },
-    rental_id: {
+    payment_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: Rental, // เชื่อมโยงกับ Rental
-            key: 'rental_id'
+            model: Payment, // เชื่อมโยงกับ Rental
+            key: 'payment_id'
         }
     },
     return_id: {
@@ -294,8 +275,8 @@ const Order = sequelize.define('order', {
 Order.belongsTo(Users, { foreignKey: 'user_id' });
 Users.hasMany(Order, { foreignKey: 'user_id' });
 
-Order.belongsTo(Rental, { foreignKey: 'rental_id' });
-Rental.hasMany(Order, { foreignKey: 'rental_id' });
+Order.belongsTo(Rental, { foreignKey: 'payment_id' });
+Payment.hasMany(Order, { foreignKey: 'payment_id' });
 
 Order.belongsTo(Return, { foreignKey: 'return_id' });
 Return.hasMany(Order, { foreignKey: 'return_id' });
@@ -310,9 +291,6 @@ Rental.belongsTo(Camera, { foreignKey: 'camera_id' });
 // เชื่อมโยงความสัมพันธ์ระหว่าง Payment กับ Users และ Rental
 Payment.belongsTo(Users, { foreignKey: 'users_id' });
 Users.hasMany(Payment, { foreignKey: 'users_id' });
-
-Rental.hasMany(Payment, { foreignKey: 'rental_id' });
-Payment.belongsTo(Rental, { foreignKey: 'rental_id' });
 
 Rental.hasOne(Return, { foreignKey: 'rental_id' });
 Return.belongsTo(Rental, { foreignKey: 'rental_id' });
