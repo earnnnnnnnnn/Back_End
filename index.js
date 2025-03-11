@@ -190,6 +190,13 @@ const Payment = sequelize.define('Payment', {
     payment_method: {
         type: Sequelize.STRING,
         allowNull: true
+    },users_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references :{
+            model:Users,
+            key: "users_id"
+          }
     },
     users_id: {
         type: Sequelize.INTEGER,
