@@ -16,44 +16,57 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: './Database/CameraDB.sqlite',
 });
 
-//return
-// define the book model
-const Report = sequelize.define('Report', {
-    report_id: {
+//order
+const Order = sequelize.define('order', {
+    order_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
+    user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Users,   // เชื่อมโยงกับ Users
+            key: 'user_id'
+        }
+    },
     rental_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    return_date: {
-        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-                get() {
-                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('return_date'))
-                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-                }
+        references: {
+            model: Rental, // เชื่อมโยงกับ Rental
+            key: 'rental_id'
+        }
     },
-    condition: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    extra_charge: {
-        type: Sequelize.STRING,
-        allowNull: false
+    return_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Return, // เชื่อมโยงกับ Return
+            key: 'return_id'
+        }
     }
 });
+
+// เชื่อมโยงความสัมพันธ์ระหว่าง Order กับ Rental และ Users
+Order.belongsTo(Users, { foreignKey: 'user_id' });
+Users.hasMany(Order, { foreignKey: 'user_id' });
+
+Order.belongsTo(Rental, { foreignKey: 'rental_id' });
+Rental.hasMany(Order, { foreignKey: 'rental_id' });
+
+Order.belongsTo(Return, { foreignKey: 'return_id' });
+Return.hasMany(Order, { foreignKey: 'return_id' });
 
 // create the table if it doesn't exist
 sequelize.sync()
 
 
+
+// order
 // route to get all books
-app.get("/return", (req, res) => {
+app.get("/Order", (req, res) => {
    Return.findAll().then(returns => {
        res.json(returns);
    }).catch(err => {
@@ -62,7 +75,7 @@ app.get("/return", (req, res) => {
 });
 
 // route to get a book by id
-app.get('/return/:id', (req, res) => {
+app.get('/Order/:id', (req, res) => {
     Return.findByPk(req.params.id).then(returns => {
         if (!returns)
             res.status(404).send();
@@ -74,7 +87,7 @@ app.get('/return/:id', (req, res) => {
 });
 
 // route to add a new book
-app.post('/return', (req, res) => {
+app.post('/Order', (req, res) => {
     Return.create(req.body).then(returns => {
         res.json(returns);
     }
@@ -84,7 +97,7 @@ app.post('/return', (req, res) => {
 });
 
 // route to update a book
-app.put('/return/:id', (req, res) => {
+app.put('/Order/:id', (req, res) => {
     Return.findByPk(req.params.id).then(returns => {
         if (!returns)
             res.status(404).send();
@@ -100,7 +113,7 @@ app.put('/return/:id', (req, res) => {
 });
 
 // route to delete a book
-app.delete('/return/:id', (req, res) => {
+app.delete('/Order/:id', (req, res) => {
     Return.findByPk(req.params.id).then(returns => {
         if (!returns)
             res.status(404).send();
