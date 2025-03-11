@@ -190,6 +190,13 @@ const Payment = sequelize.define('Payment', {
     payment_method: {
         type: Sequelize.STRING,
         allowNull: true
+    },users_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references :{
+            model:Users,
+            key: "users_id"
+          }
     },
     rental_id: {
         type: Sequelize.INTEGER,
@@ -293,6 +300,10 @@ Rental.belongsTo(Users, { foreignKey: 'users_id' });
 
 Camera.hasMany(Rental, { foreignKey: 'camera_id' });
 Rental.belongsTo(Camera, { foreignKey: 'camera_id' });
+
+// เชื่อมโยงความสัมพันธ์ระหว่าง Payment กับ Users และ Rental
+Payment.belongsTo(Users, { foreignKey: 'users_id' });
+Users.hasMany(Payment, { foreignKey: 'users_id' });
 
 Rental.hasMany(Payment, { foreignKey: 'rental_id' });
 Payment.belongsTo(Rental, { foreignKey: 'rental_id' });
