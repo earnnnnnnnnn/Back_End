@@ -95,21 +95,21 @@ const Rental = sequelize.define('Rental', {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-                get() {
-                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('start_date'))
-                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-                }
+        get() {
+            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+            return new Date(this.getDataValue('start_date'))
+                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+        }
     },
     end_date: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-                get() {
-                    // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-                    return new Date(this.getDataValue('end_date'))
-                        .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-                }
+        get() {
+            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+            return new Date(this.getDataValue('end_date'))
+                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+        }
     },
     total_price: {
         type: Sequelize.FLOAT,
@@ -189,7 +189,7 @@ const Payment = sequelize.define('Payment', {
     },
     payment_method: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     rental_id: {
         type: Sequelize.INTEGER,
@@ -468,6 +468,8 @@ app.get("/rental", (req, res) => {
  
  // route to add a new book
  app.post('/rental', (req, res) => {
+    console.log(req.body);
+    
      Rental.create(req.body).then(rental => {
          res.json(rental);
      }
@@ -476,6 +478,7 @@ app.get("/rental", (req, res) => {
      });
  });
  
+
  // route to update a book
  app.put('/rental/:id', (req, res) => {
      Rental.findByPk(req.params.id).then(rental => {
