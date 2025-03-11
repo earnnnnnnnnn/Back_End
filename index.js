@@ -191,6 +191,14 @@ const Payment = sequelize.define('Payment', {
         type: Sequelize.STRING,
         allowNull: true
     },
+    users_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references :{
+            model:Users,
+            key: "users_id"
+        }
+    },
     rental_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -285,14 +293,16 @@ Rental.hasMany(Order, { foreignKey: 'rental_id' });
 Order.belongsTo(Return, { foreignKey: 'return_id' });
 Return.hasMany(Order, { foreignKey: 'return_id' });
 
-
-
 // // ตั้งค่าความสัมพันธ์หลังจากประกาศโมเดล
 Users.hasMany(Rental, { foreignKey: 'users_id' });
 Rental.belongsTo(Users, { foreignKey: 'users_id' });
 
 Camera.hasMany(Rental, { foreignKey: 'camera_id' });
 Rental.belongsTo(Camera, { foreignKey: 'camera_id' });
+
+// เชื่อมโยงความสัมพันธ์ระหว่าง Payment กับ Users และ Rental
+Payment.belongsTo(Users, { foreignKey: 'users_id' });
+Users.hasMany(Payment, { foreignKey: 'users_id' });
 
 Rental.hasMany(Payment, { foreignKey: 'rental_id' });
 Payment.belongsTo(Rental, { foreignKey: 'rental_id' });
