@@ -81,7 +81,7 @@ const Camera = sequelize.define('Camera', {
 });
 
 
-const Order = sequelize.define('order', {
+const Order = sequelize.define('Order', {
     order_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -145,15 +145,7 @@ const Cart = sequelize.define('Cart', {
             model:Camera,
             key: "camera_id"
         }
-    },
-    order_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references :{
-            model:Order,
-            key: "order_id"
-        }
-    }   
+    },  
 });
 
 
