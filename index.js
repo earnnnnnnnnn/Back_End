@@ -81,45 +81,71 @@ const Camera = sequelize.define('Camera', {
 });
 
 
-const Order = sequelize.define('Order', {
-    order_id: {
+//payment
+// define the book model
+const Payment = sequelize.define('Payment', {
+    payment_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    user_id: {
+    users_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-            model: Users,   // เชื่อมโยงกับ Users
-            key: 'user_id'
-        }
-    },
-    startDate: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-        get() {
-            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-            return new Date(this.getDataValue('start_date'))
-                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-        }
-    },
-    endDate: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-        get() {
-            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-            return new Date(this.getDataValue('end_date'))
-                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-        }
+        references :{
+            model:Users,
+            key: "users_id"
+          }
     },
     totalPrice: {
         type: Sequelize.FLOAT,
         allowNull: false
     }
 });
+
+
+const Order = sequelize.define('Orders', {
+    order_id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    payment_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Payment,
+            key: 'payment_id'
+        }
+    },
+    user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Users,
+            key: 'users_id'
+        }
+    },
+    camera_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Camera,
+            key: 'camera_id'
+        }
+    },
+    startDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,  // กำหนดให้เป็นเวลาปัจจุบัน
+    },
+    endDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,  // กำหนดให้เป็นเวลาปัจจุบัน
+    },
+});
+
 
 
 
@@ -150,27 +176,6 @@ const Cart = sequelize.define('Cart', {
 
 
 
-//payment
-// define the book model
-const Payment = sequelize.define('Payment', {
-    payment_id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    amount: {
-        type: Sequelize.FLOAT,
-        allowNull: false
-    },
-    users_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references :{
-            model:Users,
-            key: "users_id"
-          }
-    }
-});
 
 
 //order
@@ -333,8 +338,8 @@ app.get("/camera", (req, res) => {
 
 //Cart
 app.get("/Cart", (req, res) => {
-    Rental.findAll().then(rental => {
-        res.json(rental);
+    Cart.findAll().then(cart => {
+        res.json(cart);
     }).catch(err => {
         res.status(500).send(err);
     });
@@ -342,11 +347,11 @@ app.get("/Cart", (req, res) => {
  
  // route to get a book by id
  app.get('/Cart/:id', (req, res) => {
-     Rental.findByPk(req.params.id).then(rental => {
-         if (!rental)
+    Cart.findByPk(req.params.id).then(cart => {
+         if (!cart)
              res.status(404).send();
          else
-             res.json(rental);
+             res.json(cart);
      }).catch(err => {
          res.status(500).send(err);
      });
@@ -356,8 +361,8 @@ app.get("/Cart", (req, res) => {
  app.post('/Cart', (req, res) => {
     console.log(req.body);
     
-     Rental.create(req.body).then(rental => {
-         res.json(rental);
+    Cart.create(req.body).then(cart => {
+         res.json(cart);
      }
      ).catch(err => {
          res.status(500).send(err);
@@ -367,12 +372,12 @@ app.get("/Cart", (req, res) => {
 
  // route to update a book
  app.put('/Cart/:id', (req, res) => {
-     Rental.findByPk(req.params.id).then(rental => {
-         if (!rental)
+    Cart.findByPk(req.params.id).then(cart => {
+         if (!cart)
              res.status(404).send();
          else
-             rental.update(req.body).then(rental => {
-                 res.json(rental);
+         cart.update(req.body).then(cart => {
+                 res.json(cart);
              }).catch(err => {
                  res.status(500).send(err);
              });
@@ -382,14 +387,15 @@ app.get("/Cart", (req, res) => {
  });
  
  // route to delete a book
-app.delete('/Cart/:id/', (req, res) => {
+app.delete('/Cart/:id/:uid', (req, res) => {
     const { id, uid } = req.params;
-    Rental.findOne({ where: { camera_id: id, users_id: uid } }).then(rental => {
-        if (!rental)
+
+    Cart.findOne({ where: { camera_id: id, users_id: uid } }).then(cart => {
+        if (!cart)
             res.status(404).send();
         else
-            rental.destroy().then(() => {
-                res.json(rental);
+            cart.destroy().then(() => {
+                res.json(cart);
             }).catch(err => {
                 res.status(500).send(err);
             });
@@ -467,8 +473,8 @@ app.get("/payment", (req, res) => {
 // order
 // route to get all books
 app.get("/Order", (req, res) => {
-    Return.findAll().then(returns => {
-        res.json(returns);
+    Order.findAll().then(order => {
+        res.json(order);
     }).catch(err => {
         res.status(500).send(err);
     });
@@ -476,11 +482,11 @@ app.get("/Order", (req, res) => {
  
  // route to get a book by id
  app.get('/Order/:id', (req, res) => {
-     Return.findByPk(req.params.id).then(returns => {
-         if (!returns)
+    Order.findByPk(req.params.id).then(order => {
+         if (!order)
              res.status(404).send();
          else
-             res.json(returns);
+             res.json(order);
      }).catch(err => {
          res.status(500).send(err);
      });
@@ -488,8 +494,8 @@ app.get("/Order", (req, res) => {
  
  // route to add a new book
  app.post('/Order', (req, res) => {
-     Return.create(req.body).then(returns => {
-         res.json(returns);
+    Order.create(req.body).then(order => {
+         res.json(order);
      }
      ).catch(err => {
          res.status(500).send(err);
@@ -498,12 +504,12 @@ app.get("/Order", (req, res) => {
  
  // route to update a book
  app.put('/Order/:id', (req, res) => {
-     Return.findByPk(req.params.id).then(returns => {
-         if (!returns)
+    Order.findByPk(req.params.id).then(order => {
+         if (!order)
              res.status(404).send();
          else
-             returns.update(req.body).then(returns => {
-                 res.json(returns);
+             order.update(req.body).then(order => {
+                 res.json(order);
              }).catch(err => {
                  res.status(500).send(err);
              });
@@ -514,12 +520,12 @@ app.get("/Order", (req, res) => {
  
  // route to delete a book
  app.delete('/Order/:id', (req, res) => {
-     Return.findByPk(req.params.id).then(returns => {
-         if (!returns)
+    Order.findByPk(req.params.id).then(order => {
+         if (!order)
              res.status(404).send();
          else
-             returns.destroy().then(() => {
-                 res.json(returns);
+            order.destroy().then(() => {
+                 res.json(order);
              }).catch(err => {
                  res.status(500).send(err);
              });
@@ -533,6 +539,7 @@ app.get("/Order", (req, res) => {
  const PORT = 3000;
 
  const { execSync } = require('child_process');
+const { type } = require('os');
  
  const clearPort = (port) => {
      try {
