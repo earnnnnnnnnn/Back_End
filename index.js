@@ -81,6 +81,48 @@ const Camera = sequelize.define('Camera', {
 });
 
 
+const Order = sequelize.define('order', {
+    order_id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Users,   // เชื่อมโยงกับ Users
+            key: 'user_id'
+        }
+    },
+    startDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
+        get() {
+            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+            return new Date(this.getDataValue('start_date'))
+                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+        }
+    },
+    endDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
+        get() {
+            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
+            return new Date(this.getDataValue('end_date'))
+                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
+        }
+    },
+    totalPrice: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+    }
+});
+
+
+
 //Cart
 const Cart = sequelize.define('Cart', {
     cart_id: {
@@ -140,45 +182,6 @@ const Payment = sequelize.define('Payment', {
 
 
 //order
-const Order = sequelize.define('order', {
-    order_id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    user_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: Users,   // เชื่อมโยงกับ Users
-            key: 'user_id'
-        }
-    },
-    startDate: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-        get() {
-            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-            return new Date(this.getDataValue('start_date'))
-                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-        }
-    },
-    endDate: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW, // ✅ ค่าเริ่มต้นเป็นเวลาปัจจุบัน
-        get() {
-            // ✅ แปลงเวลาให้อยู่ในรูปแบบ "YYYY-MM-DD HH:MM:SS"
-            return new Date(this.getDataValue('end_date'))
-                .toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
-        }
-    },
-    totalPrice: {
-        type: Sequelize.FLOAT,
-        allowNull: false
-    }
-});
 
 Order.belongsTo(Users, { foreignKey: 'user_id' });
 Users.hasMany(Order, { foreignKey: 'user_id' });
@@ -535,7 +538,31 @@ app.get("/Order", (req, res) => {
  
 
 
+ const PORT = 3000;
 
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
-});
+ const { execSync } = require('child_process');
+ 
+ const clearPort = (port) => {
+     try {
+         const result = execSync(`netstat -ano | findstr :${port}`).toString();
+         const lines = result.trim().split('\n');
+         
+         lines.forEach(line => {
+             const parts = line.trim().split(/\s+/);
+             const pid = parts[parts.length - 1];
+         
+             execSync(`taskkill /PID ${pid} /F`);
+             console.log(`\x1b[32mSuccessfully killed process on port ${port} (PID: ${pid})\x1b[0m`);
+         });
+     } 
+     catch (error) {
+         console.error(`\x1b[31m[ERROR]\x1b[0m Failed to clear port ${port}`);
+     }
+ };
+ 
+ 
+ clearPort(PORT);
+ 
+ app.listen(PORT, () => {
+     console.log(`\x1b[44mWebpage running on http://localhost:${PORT}\x1b[0m`);
+ });
