@@ -9,7 +9,6 @@ const Sequelize = require('sequelize');
 
 app.use(express.json());
 
-
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
