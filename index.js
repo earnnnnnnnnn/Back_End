@@ -108,7 +108,7 @@ const Cart = sequelize.define('Cart', {
         type: Sequelize.INTEGER,
         allowNull: false,
         references :{
-            model:order,
+            model:Order,
             key: "order_id"
         }
     }   
