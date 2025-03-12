@@ -7,11 +7,9 @@ const { model } = require('mongoose');
 const app = express();
 const Sequelize = require('sequelize');
 
-// parse incoming requests
 app.use(express.json());
 
 
-// open a database connection
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
@@ -19,7 +17,6 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 //users
-// define the book model
 const Users = sequelize.define('Users', {
     users_id: {
         type: Sequelize.INTEGER,
@@ -47,7 +44,6 @@ const Users = sequelize.define('Users', {
 
 
 //camera
-// define the book model
 const Camera = sequelize.define('Camera', {
     camera_id: {
         type: Sequelize.INTEGER,
@@ -82,7 +78,6 @@ const Camera = sequelize.define('Camera', {
 
 
 //payment
-// define the book model
 const Payment = sequelize.define('Payment', {
     payment_id: {
         type: Sequelize.INTEGER,
@@ -113,7 +108,7 @@ const Payment = sequelize.define('Payment', {
     },
 });
 
-
+//order
 const Order = sequelize.define('Orders', {
     order_id: {
         type: Sequelize.INTEGER,
@@ -175,11 +170,6 @@ const Cart = sequelize.define('Cart', {
 });
 
 
-
-
-
-//order
-
 Order.belongsTo(Users, { foreignKey: 'user_id' });
 Users.hasMany(Order, { foreignKey: 'user_id' });
 
@@ -198,12 +188,10 @@ Payment.belongsTo(Users, { foreignKey: 'users_id' });
 Users.hasMany(Payment, { foreignKey: 'users_id' });
 
 
-// create the table if it doesn't exist
 sequelize.sync()
 
 
 //user
-// route to get all books
 app.get("/users", (req, res) => {
    Users.findAll().then(users => {
        res.json(users);
@@ -212,7 +200,6 @@ app.get("/users", (req, res) => {
    });
 });
 
-// route to get a book by id
 app.get('/users/:id', (req, res) => {
     Users.findByPk(req.params.id).then(users => {
         if (!users)
@@ -224,7 +211,6 @@ app.get('/users/:id', (req, res) => {
     });
 });
 
-// route to add a new book
 app.post('/users', (req, res) => {
     console.log('Received data:', req.body); // ตรวจสอบข้อมูลที่ได้รับจากคำขอ
     Users.create(req.body).then(users => {
@@ -237,7 +223,6 @@ app.post('/users', (req, res) => {
     });
 });
 
-// route to update a book
 app.put('/users/:id', (req, res) => {
     Users.findByPk(req.params.id).then(users => {
         if (!users)
@@ -253,7 +238,6 @@ app.put('/users/:id', (req, res) => {
     });
 });
 
-// route to delete a book
 app.delete('/users/:id', (req, res) => {
     Users.findByPk(req.params.id).then(users => {
         if (!users)
@@ -280,7 +264,6 @@ app.get("/camera", (req, res) => {
     });
  });
  
- // route to get a book by id
  app.get('/camera/:id', (req, res) => {
      Camera.findByPk(req.params.id).then(camera => {
          if (!camera)
@@ -292,7 +275,6 @@ app.get("/camera", (req, res) => {
      });
  });
  
- // route to add a new book
  app.post('/camera', (req, res) => {
      Camera.create(req.body).then(camera => {
          res.json(camera);
@@ -302,7 +284,6 @@ app.get("/camera", (req, res) => {
      });
  });
  
- // route to update a book
  app.put('/camera/:id', (req, res) => {
      Camera.findByPk(req.params.id).then(camera => {
          if (!camera)
@@ -318,7 +299,6 @@ app.get("/camera", (req, res) => {
      });
  });
  
- // route to delete a book
  app.delete('/camera/:id', (req, res) => {
      Camera.findByPk(req.params.id).then(camera => {
          if (!camera)
@@ -345,7 +325,6 @@ app.get("/Cart", (req, res) => {
     });
  });
  
- // route to get a book by id
  app.get('/Cart/:id', (req, res) => {
     Cart.findByPk(req.params.id).then(cart => {
          if (!cart)
@@ -357,7 +336,6 @@ app.get("/Cart", (req, res) => {
      });
  });
  
- // route to add a new book
  app.post('/Cart', (req, res) => {
     console.log(req.body);
     
@@ -370,7 +348,6 @@ app.get("/Cart", (req, res) => {
  });
  
 
- // route to update a book
  app.put('/Cart/:id', (req, res) => {
     Cart.findByPk(req.params.id).then(cart => {
          if (!cart)
@@ -386,7 +363,6 @@ app.get("/Cart", (req, res) => {
      });
  });
  
- // route to delete a book
 app.delete('/Cart/:id/:uid', (req, res) => {
     const { id, uid } = req.params;
 
@@ -414,7 +390,6 @@ app.get("/payment", (req, res) => {
     });
  });
  
- // route to get a book by id
  app.get('/payment/:id', (req, res) => {
      Payment.findByPk(req.params.id).then(payment => {
          if (!payment)
@@ -426,7 +401,6 @@ app.get("/payment", (req, res) => {
      });
  });
  
- // route to add a new book
  app.post('/payment', (req, res) => {
      Payment.create(req.body).then(payment => {
          res.json(payment);
@@ -436,7 +410,6 @@ app.get("/payment", (req, res) => {
      });
  });
  
- // route to update a book
  app.put('/payment/:id', (req, res) => {
      Payment.findByPk(req.params.id).then(payment => {
          if (!payment)
@@ -452,7 +425,6 @@ app.get("/payment", (req, res) => {
      });
  });
  
- // route to delete a book
  app.delete('/payment/:id', (req, res) => {
      Payment.findByPk(req.params.id).then(payment => {
          if (!payment)
@@ -471,7 +443,6 @@ app.get("/payment", (req, res) => {
 
 
 // order
-// route to get all books
 app.get("/Order", (req, res) => {
     Order.findAll().then(order => {
         res.json(order);
@@ -480,7 +451,6 @@ app.get("/Order", (req, res) => {
     });
  });
  
- // route to get a book by id
  app.get('/Order/:id', (req, res) => {
     Order.findByPk(req.params.id).then(order => {
          if (!order)
@@ -492,7 +462,6 @@ app.get("/Order", (req, res) => {
      });
  });
  
- // route to add a new book
  app.post('/Order', (req, res) => {
     Order.create(req.body).then(order => {
          res.json(order);
@@ -502,7 +471,6 @@ app.get("/Order", (req, res) => {
      });
  });
  
- // route to update a book
  app.put('/Order/:id', (req, res) => {
     Order.findByPk(req.params.id).then(order => {
          if (!order)
@@ -518,7 +486,6 @@ app.get("/Order", (req, res) => {
      });
  });
  
- // route to delete a book
  app.delete('/Order/:id', (req, res) => {
     Order.findByPk(req.params.id).then(order => {
          if (!order)
