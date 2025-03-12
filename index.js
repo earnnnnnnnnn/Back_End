@@ -100,7 +100,17 @@ const Payment = sequelize.define('Payment', {
     totalPrice: {
         type: Sequelize.FLOAT,
         allowNull: false
-    }
+    },
+    startDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,  // กำหนดให้เป็นเวลาปัจจุบัน
+    },
+    endDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,  // กำหนดให้เป็นเวลาปัจจุบัน
+    },
 });
 
 
@@ -133,16 +143,6 @@ const Order = sequelize.define('Orders', {
             model: Camera,
             key: 'camera_id'
         }
-    },
-    startDate: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW,  // กำหนดให้เป็นเวลาปัจจุบัน
-    },
-    endDate: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW,  // กำหนดให้เป็นเวลาปัจจุบัน
     },
 });
 
