@@ -175,13 +175,11 @@ Users.hasMany(Order, { foreignKey: 'user_id' });
 Order.belongsTo(Payment, { foreignKey: 'payment_id' });
 Payment.hasMany(Order, { foreignKey: 'payment_id' });
 
-
-Users.hasMany(Cart, { foreignKey: 'users_id' });
 Cart.belongsTo(Users, { foreignKey: 'users_id' });
+Users.hasMany(Cart, { foreignKey: 'users_id' });
 
-Camera.hasMany(Cart, { foreignKey: 'camera_id' });
 Cart.belongsTo(Camera, { foreignKey: 'camera_id' });
-
+Camera.hasMany(Cart, { foreignKey: 'camera_id' });
 
 Payment.belongsTo(Users, { foreignKey: 'users_id' });
 Users.hasMany(Payment, { foreignKey: 'users_id' });
